@@ -1,17 +1,28 @@
+import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-final HttpLink httpLink = HttpLink('https://rickandmortyapi.com/graphql');
+final HttpLink backendApi = HttpLink('https://graphqlzero.almansi.me/api');
+ValueNotifier<GraphQLClient> client = ValueNotifier(
+  GraphQLClient(
+    link: backendApi,
+    cache: GraphQLCache(
+      store: InMemoryStore(),
+    ),
+  ),
+);
 
-const getCharacters = '''
-  query characters {
-      characters(page: 1, filter: { name: "rick" }) {
-        info {
-          count
-        }
-        results {
-          name
-          status
-        }
-      }
+const getLastPost = '''
+  query{
+  posts(options: {
+    sort: {
+      field: "id",
+      order: DESC
+    }
+  }){
+    data {
+      id
+      title
+    }
   }
+}
 ''';
